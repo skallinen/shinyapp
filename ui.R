@@ -6,33 +6,33 @@ library(ggplot2)
 		#tags$head(tags$script(src = "message-handler.js")),
 
 		tags$head(includeScript("google-analytics.js")),
-		title = "Content Trend Explorer and Forecaster",
-		fluidRow(
-		    column(4,
-			selectInput("select", label = h4("Narrow Down to Content Items Shared by"), 
-			    choices = list("All",
-				"Journalism & Politics Tweeters",
-				"Data & CS Tweeters",
-				"Tech Media"))),
-		    column(2,
-			h4("Step 0. Data"),
-			actionButton("data", label = "Refresh"),
-			br()
-			),
-		    column(2,
-			uiOutput("Box1")
-			),
-		    column(2,
-			h4("The Mind Boggles"),
-			checkboxInput("help", "Show/Hide Help", FALSE),
-			br()
-			)
-		    ), 
-		conditionalPanel(
-			condition = "input.help == true",
-			includeMarkdown("help.md")
-		),
-		plotOutput('newPlot'),
+    title = "Content Trend Explorer and Forecaster",
+    fluidRow(
+      column(2,
+        h4("Step 0. Data"),
+        actionButton("data", label = "Refresh"),
+        br()
+        ),
+      column(4,
+        selectInput("select", label = h4("Narrow Down to Content Items Shared by"), 
+          choices = list("All",
+            "Journalism & Politics Tweeters",
+            "Data & CS Tweeters",
+            "Tech Media"))),
+      column(2,
+        uiOutput("Box1")
+        ),
+      column(2,
+        h4("The Mind Boggles"),
+        checkboxInput("help", "Show/Hide Help", FALSE),
+        br()
+        )
+      ), 
+    conditionalPanel(
+        condition = "input.help == true",
+        includeMarkdown("help.md")
+        ),
+    plotOutput('newPlot'),
 
 		hr(),
 
