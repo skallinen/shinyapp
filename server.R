@@ -165,7 +165,7 @@ shinyServer(
 		output$Box1 = renderUI(
 				if (is.null(url_selection())){return()
 				}else selectInput("single", 
-					"Search, isolate and forecast individual items", 
+					"Forecast individual items", 
 					c(unique(url_selection()$title),"pick one item"),
 					"pick one item")
 				)                

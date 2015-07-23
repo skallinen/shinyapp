@@ -8,13 +8,14 @@ library(ggplot2)
 		tags$head(includeScript("google-analytics.js")),
     title = "Content Trend Explorer and Forecaster",
     fluidRow(
-      column(2,
-        h4("Step 0. Data"),
-        actionButton("data", label = "Refresh"),
+      column(4,
+        strong("Step 0. Data"),
+        br(),
+	actionButton("data", label = "Refresh"),
         br()
         ),
-      column(4,
-        selectInput("select", label = h4("Narrow Down to Content Items Shared by"), 
+      column(2,
+        selectInput("select", label = strong("Items Shared by"), 
           choices = list("All",
             "Journalism & Politics Tweeters",
             "Data & CS Tweeters",
@@ -23,7 +24,8 @@ library(ggplot2)
         uiOutput("Box1")
         ),
       column(2,
-        h4("The Mind Boggles"),
+        strong("The Mind Boggles"),
+	br(),
         checkboxInput("help", "Show/Hide Help", FALSE),
         br()
         )
