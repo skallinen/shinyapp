@@ -8,7 +8,7 @@ print(paste(now(), "Starting cache refresh"))
 
 # db info
 host <- "127.0.0.1"
-#port <- "27014"
+# port <- "27014"
 port <- "27017"
 
 if(file.exists("top.Rda")) {
@@ -52,6 +52,40 @@ fetchDataFromDB <- function(host, port, collection, skip, limit){
 		d
 }
 
+# function to tidy the urlmetadatas collection
+tidy_elements <- function(x){
+        y <- fromJSON(x)
+        y <- sapply(y, function(z) z)
+        ret <- data.frame(matrix(nrow=1, ncol=15))
+        names(ret) <- c("title",
+                        "metaDescription",
+                        "og_title",
+                        "og_type",
+                        "og_image",
+                        "og_description",
+                        "og_site_name",
+                        "og_author",
+                        "og_publisher",
+                        "twitter_title",
+                        "twitter_description",
+                        "twitter_image",
+                        "rel_author",
+                        "rel_publisher")
+        ret$title <- ifelse(class(y$title)!="NULL", y$title, NA)
+        ret$metaDescription <- ifelse(class(y$metaDescription)!="NULL", y$metaDescription, NA)
+        ret$og_title <- ifelse(class(y$og_title)!="NULL", y$og_title, NA)
+        ret$og_description <- ifelse(class(y$og_description)!="NULL", y$og_description, NA)
+        ret$og_site_name <- ifelse(class(y$og_site_name)!="NULL", y$og_site_name, NA)
+        ret$twitter_title <- ifelse(class(y$twitter_title)!="NULL", y$twitter_title, NA)
+        ret$og_publisher <- ifelse(class(y$og_publisher)!="NULL", y$og_publisher, NA)
+        ret$twitter_description <- ifelse(class(y$twitter_description)!="NULL", y$twitter_description, NA)
+        ret$twitter_image <- ifelse(class(y$twitter_image)!="NULL", y$twitter_image, NA)
+        ret$rel_author <- ifelse(class(y$rel_author)!="NULL", y$rel_author, NA)
+        ret$rel_publisher <- ifelse(class(y$rel_publisher)!="NULL", y$rel_publisher, NA)
+        ret
+}
+
+
 
 limit_pr <- 50000 # do not load more than 100K rows from mongo
 top_pr <- findTop(host, port, 'pingrecords', topData$pr, limit_pr)# ensure that nrow in cache + limit_pr is enough 
@@ -86,7 +120,7 @@ urlmetadatas <- fetchDataFromDB(host, port, 'urlmetadatas', skip_u, 1.5*limit_um
 print(paste(now(), "Loaded url metadata", nrow(urlmetadatas),"rows"))
 
 # clean and format data
-urlmetadatas <- cbind(urlmetadatas, do.call(rbind.data.frame, lapply(urlmetadatas$meta, fromJSON)))
+urlmetadatas <- cbind(urlmetadatas, do.call(rbind.data.frame, lapply(urlmetadatas$meta, tidy_elements)))
 urlmetadatas <- select(urlmetadatas, url:rel_publisher)
 urlmetadatas$og_image <- as.character(urlmetadatas$og_image)
 urlmetadatas$og_image[urlmetadatas$og_image == "NA" | is.na(urlmetadatas$og_image)] <- 'https://dl.dropboxusercontent.com/u/19642517/white.png'
