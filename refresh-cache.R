@@ -56,7 +56,7 @@ fetchDataFromDB <- function(host, port, collection, skip, limit){
 tidy_elements <- function(x){
         y <- fromJSON(x)
         y <- sapply(y, function(z) z)
-        ret <- data.frame(matrix(nrow=1, ncol=15))
+        ret <- data.frame(matrix(nrow=1, ncol=14))
         names(ret) <- c("title",
                         "metaDescription",
                         "og_title",
@@ -74,8 +74,11 @@ tidy_elements <- function(x){
         ret$title <- ifelse(class(y$title)!="NULL", y$title, NA)
         ret$metaDescription <- ifelse(class(y$metaDescription)!="NULL", y$metaDescription, NA)
         ret$og_title <- ifelse(class(y$og_title)!="NULL", y$og_title, NA)
+        ret$og_type <- ifelse(class(y$og_type)!="NULL", y$og_type, NA)
+        ret$og_image <- ifelse(class(y$og_image)!="NULL", y$og_image, NA)
         ret$og_description <- ifelse(class(y$og_description)!="NULL", y$og_description, NA)
         ret$og_site_name <- ifelse(class(y$og_site_name)!="NULL", y$og_site_name, NA)
+        ret$og_author <- ifelse(class(y$og_author)!="NULL", y$og_author, NA)
         ret$twitter_title <- ifelse(class(y$twitter_title)!="NULL", y$twitter_title, NA)
         ret$og_publisher <- ifelse(class(y$og_publisher)!="NULL", y$og_publisher, NA)
         ret$twitter_description <- ifelse(class(y$twitter_description)!="NULL", y$twitter_description, NA)
